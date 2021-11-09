@@ -7,3 +7,5 @@ _MACOSX
 .ipynb_checkpoints
 .dist
 .pytest_cache
+.ipynb_checkpoints
+_MACOSX
