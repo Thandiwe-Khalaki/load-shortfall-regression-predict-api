@@ -23,6 +23,8 @@
 
 # Helper Dependencies
 import numpy as np
+from scipy import stats
+from sklearn.preprocessing import StandardScaler
 import pandas as pd
 import pickle
 import json
@@ -45,6 +47,19 @@ def _preprocess_data(data):
         The preprocessed data, ready to be used our model for prediction.
     """
     # Convert the json string to a python dictionary object
+    # feature_vector_dict = json.loads(data)
+    # # Load the dictionary as a Pandas DataFrame.
+    # feature_vector_df = pd.DataFrame.from_dict([feature_vector_dict])
+
+    # # ---------------------------------------------------------------
+    # # NOTE: You will need to swap the lines below for your own data
+    # # preprocessing methods.
+    # #
+    # # The code below is for demonstration purposes only. You will not
+    # # receive marks for submitting this code in an unchanged state.
+    # # ---------------------------------------------------------------
+
+       # Convert the json string to a python dictionary object
     feature_vector_dict = json.loads(data)
     # Load the dictionary as a Pandas DataFrame.
     feature_vector_df = pd.DataFrame.from_dict([feature_vector_dict])
@@ -58,8 +73,49 @@ def _preprocess_data(data):
     # ---------------------------------------------------------------
 
     # ----------- Replace this code with your own preprocessing steps --------
-    predict_vector = feature_vector_df[['Madrid_wind_speed','Bilbao_rain_1h','Valencia_wind_speed']]
-    # ------------------------------------------------------------------------
+    predict_vector = feature_vector_df
+
+    # Simple pre-processing to get model to work
+
+    predict_vector = predict_vector.drop(['time','Valencia_pressure','Valencia_wind_deg','Seville_pressure'],axis=1)
+
+    # More fancy processing -------> This doesn't work yet
+    # # Data Processing 
+    # # Dealing with the Object data types 
+    # # Strip out the categorical text, convert to numeric 
+    # predict_vector = predict_vector.convert_dtypes()
+    # predict_vector['Valencia_wind_deg'] = predict_vector['Valencia_wind_deg'].map(lambda x: x.lstrip('level_')).apply(pd.to_numeric)
+    # predict_vector['Seville_pressure'] = predict_vector['Seville_pressure'].map(lambda x: x.lstrip('sp')).apply(pd.to_numeric)
+
+    # print('Hello')
+
+    # # Data Engineerings
+
+    # # Missing Values in Valencia pressure 
+    # # *Impute Valencia_pressure column with the mode 
+    # predict_vector['Valencia_pressure'] = predict_vector['Valencia_pressure'].fillna(predict_vector['Valencia_pressure'].mode()[0])
+
+    # # Feature Engineering 
+
+    # # Get year,month,week,days,hours from time column and convert them to int
+    # predict_vector['year'] = pd.DatetimeIndex(predict_vector['time']).year
+    # predict_vector['month'] = pd.DatetimeIndex(predict_vector['time']).month
+    # predict_vector['week'] = pd.DatetimeIndex(predict_vector['time']).week
+    # predict_vector['weekdays'] = pd.DatetimeIndex(predict_vector['time']).weekday
+    # predict_vector['hour'] = pd.DatetimeIndex(predict_vector['time']).hour
+    # # Change the datatype to float, or int 
+    # predict_vector['year']= predict_vector['year'].astype('int')
+    # predict_vector['month']= predict_vector['month'].astype('int')
+    # predict_vector['week']= predict_vector['week'].astype('float')
+    # predict_vector['weekdays']= predict_vector['weekdays'].astype('int')
+    # predict_vector['hour']= predict_vector['hour'].astype('int')
+
+    # # Drop Noise
+    # predict_vector = predict_vector.drop(['Unnamed: 0', 'time'], axis = 1)
+
+    # # Scaling the Data
+    # predict_vector = StandardScaler().fit_transform(predict_vector)
+    # # ------------------------------------------------------------------------
 
     return predict_vector
 

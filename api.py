@@ -30,7 +30,7 @@ app = Flask(__name__)
 # Load our model into memory.
 # Please update this path to reflect your own trained model.
 static_model = load_model(
-    path_to_model='assets/trained-models/load_shortfall_simple_lm_regression.pkl')
+    path_to_model='assets/trained-models/rdf_model.pkl')
 
 print ('-'*40)
 print ('Model successfully loaded')
@@ -48,9 +48,12 @@ print ('-'*40)
 @app.route('/api_v0.1', methods=['POST'])
 def model_prediction():
     # We retrieve the data payload of the POST request
-    data = request.get_json(force=True)
+    data = request.get_json(force=False)
+    print(data)
     # We then preprocess our data, and use our pretrained model to make a
     # prediction.
+
+
     output = make_prediction(data, static_model)
     # We finally package this prediction as a JSON object to deliver a valid
     # response with our API.
@@ -63,3 +66,5 @@ def model_prediction():
 # update your API code.
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=False)
+    # input = {"Unnamed: 0":8764,"time":"2018-01-01 03:00:00","Madrid_wind_speed":4.6666666667,"Valencia_wind_deg":"level_8","Bilbao_rain_1h":0.0,"Valencia_wind_speed":5.3333333333,"Seville_humidity":89.0,"Madrid_humidity":78.0,"Bilbao_clouds_all":0.0,"Bilbao_wind_speed":3.6666666667,"Seville_clouds_all":0.0,"Bilbao_wind_deg":143.3333333333,"Barcelona_wind_speed":4.6666666667,"Barcelona_wind_deg":266.6666666667,"Madrid_clouds_all":0.0,"Seville_wind_speed":0.6666666667,"Barcelona_rain_1h":0.0,"Seville_pressure":"sp25","Seville_rain_1h":0.0,"Bilbao_snow_3h":0,"Barcelona_pressure":1020.3333333333,"Seville_rain_3h":0.0,"Madrid_rain_1h":0.0,"Barcelona_rain_3h":0.0,"Valencia_snow_3h":0,"Madrid_weather_id":800.0,"Barcelona_weather_id":800.3333333333,"Bilbao_pressure":1026.6666666667,"Seville_weather_id":800.0,"Valencia_pressure":null,"Seville_temp_max":282.4833333333,"Madrid_pressure":1030.3333333333,"Valencia_temp_max":284.15,"Valencia_temp":284.15,"Bilbao_weather_id":721.0,"Seville_temp":281.6733333333,"Valencia_humidity":53.6666666667,"Valencia_temp_min":284.15,"Barcelona_temp_max":284.8166666667,"Madrid_temp_max":280.4833333333,"Barcelona_temp":284.19,"Bilbao_temp_min":277.8166666667,"Bilbao_temp":281.01,"Barcelona_temp_min":283.4833333333,"Bilbao_temp_max":284.15,"Seville_temp_min":281.15,"Madrid_temp":279.1933333333,"Madrid_temp_min":278.15}
+    # result =  make_prediction(input, static_model)
