@@ -15,7 +15,7 @@ import pickle
 from sklearn.linear_model import LinearRegression
 
 # Fetch training data and preprocess for modeling
-train = pd.read_csv('./data/df_train.csv')
+train = pd.read_csv('utils\data\df_train.csv')
 
 y_train = train[['load_shortfall_3h']]
 X_train = train[['Madrid_wind_speed','Bilbao_rain_1h','Valencia_wind_speed']]
